@@ -1,17 +1,18 @@
 #####################
 # unreal
 #####################
-
-*/Build
-*/Binaries
+Binaries/
+Saved/
+Intermediate/
 */DeriveDataCache
-*/Intermediate
-*/Saved
+*/Build
+
+
 
 #####################
 # c++
 #####################
-
+.vs/
 */.vs
 *.VC.db
 
@@ -49,3 +50,4 @@
 *.exe
 *.out
 *.app
+
