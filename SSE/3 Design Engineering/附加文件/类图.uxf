@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>11</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>517</x>
+      <y>0</y>
+      <w>231</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract entity&gt;&gt;
+Actor
+--
+- Location
+- Rotation
+- Scale
+--
+- BeginPlay()
+- Tick()
+--
+接口：基本变换信息</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>242</x>
+      <y>242</y>
+      <w>231</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;entity&gt;&gt;
+Player
+--
+- HealthPoint
+- Speed
+--
++ Hited()
+--
+玩家控制的角色</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>847</x>
+      <y>242</y>
+      <w>231</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;entity&gt;&gt;
+Enemy
+--
+- ProjectileClass
+--
++ Fire()
+--
+敌人
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>517</x>
+      <y>242</y>
+      <w>231</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;entity&gt;&gt;
+Projectile
+--
+- Speed
+- Direction
+- MoveType
+- LifeSpan
+--
++ OnHit()
+--
+敌人发射的弹幕</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>792</x>
+      <y>484</y>
+      <w>231</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;control&gt;&gt;
+AIController
+--
+- *Enemy
+- *Projectiles[ ]
+--
++ Start()
+- ChangeState()
+- GenerateProjectile()
+--
+控制敌人生成弹幕
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>242</x>
+      <y>484</y>
+      <w>231</w>
+      <h>198</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;control&gt;&gt;
+PlayerController
+--
+- *Player
+--
++ Start()
++ MoveForward()
++ MoveRight()
++ SpeedUp()
+- ChangeState()
+- GameHasEnded()
+--
+控制角色移动</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>517</x>
+      <y>693</y>
+      <w>231</w>
+      <h>242</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;control&gt;&gt;
+Game
+--
+- GameState
+- *Player
+- UIwedgit
+- PlayerController
+- AIController
+- CollisionDetect
+--
++ GameStart()
+- GameEnd()
+- ChangeState()
+--
+配置游戏资源及控制游戏进程</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>627</x>
+      <y>154</y>
+      <w>33</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>715</x>
+      <y>154</y>
+      <w>264</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>352</x>
+      <y>154</y>
+      <w>209</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>170.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>242</x>
+      <y>968</y>
+      <w>231</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;boundary&gt;&gt;
+InputInterface
+--
+- KeyMap
+--
++ GetInput()
+- ProcessInput()
+--
+接收键盘、鼠标的输入
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>517</x>
+      <y>968</y>
+      <w>231</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;boundary&gt;&gt;
+Camera
+--
+- *Player
+--
++ Draw()
+--
+绘制角色看到的画面
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>792</x>
+      <y>968</y>
+      <w>231</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;boundary&gt;&gt;
+Sounder
+--
+- Volume
+--
++ PlaySound()
+--
+音效渲染
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>517</x>
+      <y>484</y>
+      <w>231</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;control&gt;&gt;
+CollisionDetect
+--
+- *Player
+- *Projectile
+--
++ Start()
+- isOverlap()
+- OverlapCallBack()
+--
+碰撞检测</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>517</x>
+      <y>1166</y>
+      <w>231</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;actor&gt;&gt;
+玩家
+(from Use Case View)
+--
+
+--
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>385</x>
+      <y>1089</y>
+      <w>209</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>737</x>
+      <y>297</y>
+      <w>132</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1
+</panel_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>341</x>
+      <y>671</y>
+      <w>33</w>
+      <h>319</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=
+m2=
+</panel_attributes>
+    <additional_attributes>10.0;270.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>341</x>
+      <y>363</y>
+      <w>33</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>396</y>
+      <w>33</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>924</x>
+      <y>341</y>
+      <w>33</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>429</x>
+      <y>363</y>
+      <w>143</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>737</x>
+      <y>363</y>
+      <w>132</w>
+      <h>143</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>462</x>
+      <y>660</y>
+      <w>77</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>1067</y>
+      <w>33</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>693</x>
+      <y>1067</y>
+      <w>154</w>
+      <h>121</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>924</y>
+      <w>33</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=
+m2=
+</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>737</x>
+      <y>913</y>
+      <w>198</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=
+m2=
+</panel_attributes>
+    <additional_attributes>160.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>638</y>
+      <w>33</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>737</x>
+      <y>638</y>
+      <w>121</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>385</x>
+      <y>913</y>
+      <w>154</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=
+m2=
+</panel_attributes>
+    <additional_attributes>10.0;50.0;120.0;10.0</additional_attributes>
+  </element>
+</diagram>
