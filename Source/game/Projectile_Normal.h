@@ -37,4 +37,6 @@ public:
 
 	// 设置发射方向
 	void FireInDirection(const FVector& ShootDirection);
+	// 设置发射速度
+	void SetSpeed(const float Speed);
 };

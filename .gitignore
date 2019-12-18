@@ -13,9 +13,8 @@ Intermediate/
 # c++
 #####################
 .vs/
-*/.vs
 *.VC.db
-
+*/.vs
 
 
 # Prerequisites

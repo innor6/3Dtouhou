@@ -39,7 +39,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* OurCamera;
 	//输入变量
-	FVector2D MovementInput;
+	FVector MovementInput;
 	FVector2D CameraInput;
 	float ZoomFactor;
 	bool bZoomingIn;
@@ -49,6 +49,7 @@ protected:
 	//输入回调函数
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+	void MoveUpward(float AxisValue);
 	void PitchCamera(float AxisValue);
 	void YawCamera(float AxisValue);
 	void ZoomIn();

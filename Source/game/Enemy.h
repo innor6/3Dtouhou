@@ -27,32 +27,62 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	// 定时器
+	// 【定时器】
 	// 定时器重复次数
 	UPROPERTY(EditAnywhere)
 	int32 RepeatingCallsRemaining;
 
+	// 定时器延时
+	//float TimerRate_4_2 = 0.05f;
+
 	// 回调函数
 	void TimerCallback();
+	void TimerCallback2();
+	void TimerCallback3();
+	void TimerCallback4();
+	void TimerCallback5();
+
+	// 定时器句柄
+	FTimerHandle MemberTimerHandle;
 
 	// 定时结束后
 	//UFUNCTION(BlueprintNativeEvent)
 	void CountdownHasFinished();
 
-	// 定时器句柄
-	FTimerHandle MemberTimerHandle;
-
-
-
-	// 发射弹幕
-	UFUNCTION()
-	void Fire();
 
 	// 从摄像机位置的枪口偏移
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FVector MuzzleOffset;
 
-	// 生成的发射物类
+	// 发射弹幕
+	UFUNCTION() void Fire(); //测试
+	UFUNCTION() void Fire2_1(); //二非-六角光玉
+	UFUNCTION() void Fire2_2(); //二非-随机粉弹
+	UFUNCTION() void Fire3_1(); //生者必灭之理-跟踪光玉
+	UFUNCTION() void Fire3_2(); //生者必灭之理-蝴蝶三旋臂
+	UFUNCTION() void Fire4_1(); //埋骨于弘川-固定蝴蝶
+	UFUNCTION() void Fire4_2(); //埋骨于弘川-跟踪蝴蝶
+	UFUNCTION() void Fire5_1(); //返魂蝶-球面光玉
+
+	// 发射物类1：光玉
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
 	TSubclassOf<class AProjectile_Normal> ProjectileClass;
+	// 发射物类2：小粉弹
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AProjectile_Normal> Projectile_Pink;
+	// 发射物类3：蝴蝶
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AProjectile_Normal> Projectile_Butterfly;
+	// 发射物类4：延迟光玉
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AProjectile_DelayeSnipe> Projectile_DelayedTama;
+	// 发射物类5：延迟蝴蝶
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AProjectile_DelayeSnipe> Projectile_DelayedButterfly;
+
+	// 发射参数
+	int spellcard = 1;
+	int count3_1 = 6;
+	int count3_2 = 0;
+	int count4_2 = 1; //左右发蝴蝶，正负变换
 };

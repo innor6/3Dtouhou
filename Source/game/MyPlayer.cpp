@@ -14,7 +14,7 @@ AMyPlayer::AMyPlayer()
 	// 组件：弹簧臂
 	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
 	OurCameraSpringArm->SetupAttachment(RootComponent);
-	OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 10.0f), FRotator(-10.0f, 0.0f, 0.0f)); //FVector(0.0f, 0.0f, 50.0f), FRotator(-60.0f, 0.0f, 0.0f)
+	OurCameraSpringArm->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 10.0f), FRotator(0.0f, 0.0f, 0.0f)); //FVector(0.0f, 0.0f, 50.0f), FRotator(-60.0f, 0.0f, 0.0f)
 	OurCameraSpringArm->TargetArmLength = 400.f;
 	OurCameraSpringArm->bEnableCameraLag = true;
 	OurCameraSpringArm->CameraLagSpeed = 8.0f; //弹簧臂滞后速度
@@ -101,6 +101,7 @@ void AMyPlayer::Tick(float DeltaTime)
 			FVector NewLocation = GetActorLocation();
 			NewLocation += GetActorForwardVector() * MovementInput.X * DeltaTime;
 			NewLocation += GetActorRightVector() * MovementInput.Y * DeltaTime;
+			NewLocation += GetActorUpVector() * MovementInput.Z * DeltaTime;
 			SetActorLocation(NewLocation);
 		}
 	}
@@ -123,6 +124,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	//连接四个轴的逐帧处理
 	InputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
+	InputComponent->BindAxis("MoveUpward", this, &AMyPlayer::MoveUpward);
 	InputComponent->BindAxis("MouseY", this, &AMyPlayer::PitchCamera);
 	InputComponent->BindAxis("MouseX", this, &AMyPlayer::YawCamera);
 
@@ -137,6 +139,11 @@ void AMyPlayer::MoveForward(float AxisValue)
 void AMyPlayer::MoveRight(float AxisValue)
 {
 	MovementInput.Y = FMath::Clamp<float>(AxisValue, -1.0f, 1.0f);
+}
+
+void AMyPlayer::MoveUpward(float AxisValue)
+{
+	MovementInput.Z = FMath::Clamp<float>(AxisValue, -1.0f, 1.0f);
 }
 
 void AMyPlayer::PitchCamera(float AxisValue)
