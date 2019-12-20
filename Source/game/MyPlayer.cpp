@@ -10,7 +10,13 @@ AMyPlayer::AMyPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 根组件
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	//RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	// 根组件：使用球体代表简单碰撞
+	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Player")); // 设置碰撞通道
+	CollisionComponent->InitSphereRadius(15.0f); //碰撞半径
+	RootComponent = CollisionComponent;
+
 	// 组件：弹簧臂
 	OurCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
 	OurCameraSpringArm->SetupAttachment(RootComponent);
@@ -42,22 +48,6 @@ void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//按下鼠标右键按钮时放大，松开时恢复
-	/*
-	{
-		if (bZoomingIn)
-		{
-			ZoomFactor += DeltaTime / 0.5f;         //Zoom in over half a second
-		}
-		else
-		{
-			ZoomFactor -= DeltaTime / 0.25f;        //缩小四分之一秒
-		}
-		ZoomFactor = FMath::Clamp<float>(ZoomFactor, 0.0f, 1.0f);
-		//基于ZoomFactor混合相机的FOV和SpringArm长度
-		OurCamera->FieldOfView = FMath::Lerp<float>(90.0f, 60.0f, ZoomFactor);
-		OurCameraSpringArm->TargetArmLength = FMath::Lerp<float>(400.0f, 300.0f, ZoomFactor);
-	}*/
 
 	//按下鼠标右键变为高速移动，视角变化，松开时恢复
 	{

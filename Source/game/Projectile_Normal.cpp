@@ -13,9 +13,9 @@ AProjectile_Normal::AProjectile_Normal()
 
 	// 根组件：使用球体代表简单碰撞
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	// 设置碰撞通道
+	// 设置碰撞通道、碰撞半径
 	CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
-	CollisionComponent->InitSphereRadius(15.0f); //碰撞半径
+	CollisionComponent->InitSphereRadius(15.0f);
 	RootComponent = CollisionComponent;
 
 	// 投射物组件：驱动发射物的运动

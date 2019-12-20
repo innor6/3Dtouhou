@@ -21,9 +21,10 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 
 	// 设置计时器重复次数
-	RepeatingCallsRemaining = 1000;
+	RepeatingCallsRemaining = 6;
+	spellcard = 1;
 	// 定时器：每x秒调用一次TimerCallback
-	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback3, 0.1f, true);
+	GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback, 2.0f, true);
 
 }
 
@@ -48,20 +49,20 @@ void AEnemy::CountdownHasFinished()
 	MuzzleOffset = FVector(0, 0, 0);
 	if (spellcard == 2)
 	{
-		RepeatingCallsRemaining = 80;
-		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback2, 0.5f, true);
+		RepeatingCallsRemaining = 70;
+		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback2, 0.5f, true, 2.0f);
 	}
 	else if (spellcard == 3) {
-		RepeatingCallsRemaining = 20;
-		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback3, 1.0f, true);
+		RepeatingCallsRemaining = 380;
+		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback3, 0.1f, true, 2.0f);
 	}
 	else if (spellcard == 4) {
-		RepeatingCallsRemaining = 40;
-		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback4, 1.5f, true);
+		RepeatingCallsRemaining = 235;//310
+		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback4, 0.1f, true, 2.0f);
 	}
 	else if (spellcard == 5) {
-		RepeatingCallsRemaining = 20;
-		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback5, 4.0f, true);
+		RepeatingCallsRemaining = 9;
+		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AEnemy::TimerCallback5, 2.0f, true);
 	}
 }
 
@@ -114,19 +115,19 @@ void AEnemy::TimerCallback3()
 	
 }
 
-void AEnemy::TimerCallback4() //1.5s一次
+void AEnemy::TimerCallback4()
 {
 	// 出口
-	if (--RepeatingCallsRemaining <= 0)
+	if (--RepeatingCallsRemaining <= -1)
 	{
 		GetWorldTimerManager().ClearTimer(MemberTimerHandle);
 		CountdownHasFinished();
 	}
 
 	//发射弹幕
-	if (RepeatingCallsRemaining % 5 == 0)
+	if (RepeatingCallsRemaining % 75 < 10 && (RepeatingCallsRemaining % 75) % 2 == 0)
 		Fire4_1(); 
-	else
+	else if (RepeatingCallsRemaining % 15 == 0)
 		Fire4_2();
 }
 
@@ -140,15 +141,17 @@ void AEnemy::TimerCallback5() //2s一次
 	}
 
 	//发射弹幕
-	Fire5_1();
+	if (RepeatingCallsRemaining % 2 == 0)
+		Fire5_1();
+	else if (RepeatingCallsRemaining % 2 == 1)
+		Fire5_2();
 }
 
 
 
-// FVector MuzzleLocation：发射坐标
-// FRotator MuzzleRotation：发射方向
 
-// 发射弹幕【改】
+
+// 发射弹幕
 void AEnemy::Fire()
 {
 	// 尝试发射物体
@@ -191,6 +194,8 @@ void AEnemy::Fire()
 						// 设置发射物的初始轨道。
 						FVector LaunchDirection = MuzzleRotation.Vector();
 						Projectile->FireInDirection(LaunchDirection);
+						// 设置初始速度
+						Projectile->SetSpeed(800.0f);
 					}
 				}
 
@@ -199,8 +204,6 @@ void AEnemy::Fire()
 		}
 	}
 }
-
-
 
 // 发射弹幕：二非-六角光玉
 void AEnemy::Fire2_1()
@@ -212,7 +215,7 @@ void AEnemy::Fire2_1()
 		FRotator CameraRotation;
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 		// 将 MuzzleOffset 从摄像机空间变换到世界空间
-		MuzzleOffset = FVector(0, FMath::FRandRange(-1000.0f, +1000.0f), FMath::FRandRange(-500.0f, +500.0f));
+		MuzzleOffset = FVector(0, FMath::FRandRange(-500.0f, +500.0f), FMath::FRandRange(-300.0f, +300.0f));
 		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 		FRotator MuzzleRotation = CameraRotation;
 
@@ -243,6 +246,7 @@ void AEnemy::Fire2_1()
 			{
 				FVector LaunchDirection = MuzzleRotation.Vector();
 				Projectile->FireInDirection(LaunchDirection);
+				Projectile->SetSpeed(800.0f);
 			}
 
 
@@ -269,6 +273,8 @@ void AEnemy::Fire2_1()
 						// 设置发射物的初始轨道
 						FVector LaunchDirection = MuzzleRotation.Vector();
 						Projectile->FireInDirection(LaunchDirection);
+						// 设置初始速度
+						Projectile->SetSpeed(800.0f);
 					}
 				}
 			}
@@ -279,7 +285,7 @@ void AEnemy::Fire2_1()
 // 发射弹幕：二非-随机粉弹
 void AEnemy::Fire2_2()
 {
-	if (ProjectileClass)
+	if (Projectile_Pink)
 	{
 		// 坐标变换
 		FVector CameraLocation;
@@ -308,7 +314,7 @@ void AEnemy::Fire2_2()
 			// 生成多个发射物
 			for (int i = 0; i < 25; ++i)
 			{
-				MuzzleRotation = FMath::VRandCone(focus, 1.0f).Rotation();
+				MuzzleRotation = FMath::VRandCone(focus, 1.2f).Rotation();
 
 				Projectile = World->SpawnActor<AProjectile_Normal>(Projectile_Pink, MuzzleLocation, MuzzleRotation, SpawnParams);
 				if (Projectile)
@@ -327,7 +333,7 @@ void AEnemy::Fire2_2()
 // 发射弹幕：生者必灭之理-跟踪光玉
 void AEnemy::Fire3_1()
 {
-	if (ProjectileClass)
+	if (Projectile_DelayedTama)
 	{
 		// 获取摄像机变换。
 		FVector CameraLocation;
@@ -368,7 +374,7 @@ void AEnemy::Fire3_1()
 				// 设置定时器延时
 				Projectile->DelayTime = 6.0f;
 				// 狙击速度
-				Projectile->SnipeSpeed = 3000.0f;
+				Projectile->SnipeSpeed = 2000.0f;
 				// 设置发射物的初始轨道
 				FVector LaunchDirection = MuzzleRotation.Vector();
 				Projectile->FireInDirection(LaunchDirection);
@@ -379,11 +385,10 @@ void AEnemy::Fire3_1()
 	}
 }
 
-// 发射弹幕：生者必灭之理-蝴蝶三旋臂
-// (1,sin(theta)cos(alpha),sin(theta)sin(alpha))
+// 发射弹幕：生者必灭之理-蝴蝶三旋臂 (-cosa, sina * cosb, sina * sinb)
 void AEnemy::Fire3_2()
 {
-	if (ProjectileClass)
+	if (Projectile_Butterfly)
 	{
 		// 坐标变换
 		FVector CameraLocation;
@@ -406,19 +411,20 @@ void AEnemy::Fire3_2()
 			float cosa;
 			float sinb;
 			float cosb;
-			for (int i = 0; i < 3; ++i)
+			for (int i = 0; i < 2; ++i)
 			{
-				float theta = FMath::DegreesToRadians(10.0f* i + 30.0f); //圆锥角度
+				float theta = FMath::DegreesToRadians(10.0f* i - 6.0f * count3_2 + 30.0f); //圆锥角度
 				FMath::SinCos(&sina, &cosa, theta);
 				for (int j = 0; j < 3; ++j)
 				{
-					float alpha = FMath::DegreesToRadians(60.0f * j + 6.0f * count3_2 + 40.0f * i);
+					float alpha = FMath::DegreesToRadians(120.0f * j + 6.0f * count3_2 + 60.0f * i);
 					FMath::SinCos(&sinb, &cosb, alpha);
 					direction.X = -cosa;
 					direction.Y = sina * cosb;
 					direction.Z = sina * sinb;
 					direction.Normalize();
 					MuzzleRotation = direction.Rotation();
+					
 					Projectile = World->SpawnActor<AProjectile_Normal>(Projectile_Butterfly, MuzzleLocation, MuzzleRotation, SpawnParams);
 					if (Projectile)
 					{
@@ -426,7 +432,18 @@ void AEnemy::Fire3_2()
 						FVector LaunchDirection = MuzzleRotation.Vector();
 						Projectile->FireInDirection(LaunchDirection);
 						// 设置初始速度
-						//Projectile->SetSpeed(1000.0f);
+						Projectile->SetSpeed(500.0f);
+					}
+
+					// 反方向发射
+					direction = -direction;
+					MuzzleRotation = direction.Rotation();
+					Projectile = World->SpawnActor<AProjectile_Normal>(Projectile_Butterfly, MuzzleLocation, MuzzleRotation, SpawnParams);
+					if (Projectile)
+					{
+						FVector LaunchDirection = MuzzleRotation.Vector();
+						Projectile->FireInDirection(LaunchDirection);
+						Projectile->SetSpeed(500.0f);
 					}
 				}
 			}
@@ -435,10 +452,11 @@ void AEnemy::Fire3_2()
 	//if (++count3_2 >= 20) count3_2 = 0;
 	++count3_2;
 }
+
 // 发射弹幕：埋骨于弘川-固定蝴蝶:6s/次
 void AEnemy::Fire4_1()
 {
-	if (ProjectileClass)
+	if (Projectile_Pink)
 	{
 		// 坐标变换
 		FVector CameraLocation;
@@ -453,37 +471,36 @@ void AEnemy::Fire4_1()
 			SpawnParams.Instigator = Instigator;
 
 			AProjectile_Normal* Projectile;
-			FVector offsets[5] = { FVector(0.0f,1000.0f,500.0f),FVector(0.0f,0.0f,500.0f),FVector(0.0f,-1000.0f,500.0f),FVector(0.0f,500.0f,-500.0f),FVector(0.0f,-500.0f,-500.0f) };
-			// 生成多个发射物
-			for (int k = 0; k < 5; ++k)
-			{
-				MuzzleOffset = offsets[k];
-				// 将 MuzzleOffset 从摄像机空间变换到世界空间
-				FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
-				FRotator MuzzleRotation = CameraRotation;
-				
-				MuzzleRotation.Pitch -= 90.0f;
-				for (int i = 0; i < 17; ++i)
-				{
-					MuzzleRotation.Pitch += 10.0f;
-					MuzzleRotation.Yaw += 15.0f;
-					for (int j = 0; j < 12; ++j)
-					{
-						MuzzleRotation.Yaw += 30.0f;
-						Projectile = World->SpawnActor<AProjectile_Normal>(ProjectileClass, MuzzleLocation, MuzzleRotation, SpawnParams);
-						if (Projectile)
-						{
-							// 设置初始轨道
-							FVector LaunchDirection = MuzzleRotation.Vector();
-							Projectile->FireInDirection(LaunchDirection);
-							// 设置初始速度
-							Projectile->SetSpeed(800.0f);
-						}
-					}
+			FVector offsets[5] = { FVector(0.0f,0.0f,500.0f),FVector(0.0f,1000.0f,500.0f),FVector(0.0f,-1000.0f,500.0f),FVector(0.0f,500.0f,-500.0f),FVector(0.0f,-500.0f,-500.0f) };
 
+			MuzzleOffset = offsets[count4_1];
+			if (++count4_1 >= 5) count4_1 = 0;
+
+			// 将 MuzzleOffset 从摄像机空间变换到世界空间
+			FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+			FRotator MuzzleRotation = CameraRotation;
+
+			MuzzleRotation.Pitch -= 90.0f;
+			for (int i = 0; i < 11; ++i)
+			{
+				MuzzleRotation.Pitch += 15.0f;
+				MuzzleRotation.Yaw += 15.0f;
+				for (int j = 0; j < 12; ++j)
+				{
+					MuzzleRotation.Yaw += 30.0f;
+					Projectile = World->SpawnActor<AProjectile_Normal>(Projectile_Pink, MuzzleLocation, MuzzleRotation, SpawnParams);
+					if (Projectile)
+					{
+						// 设置初始轨道
+						FVector LaunchDirection = MuzzleRotation.Vector();
+						Projectile->FireInDirection(LaunchDirection);
+						// 设置初始速度
+						Projectile->SetSpeed(500.0f);
+					}
 				}
 			}
-			
+
+
 
 		}
 	}
@@ -492,7 +509,7 @@ void AEnemy::Fire4_1()
 // 发射弹幕：埋骨于弘川-跟踪蝴蝶：1.5s/次*4
 void AEnemy::Fire4_2()
 {
-	if (ProjectileClass)
+	if (Projectile_DelayedButterfly)
 	{
 		// 坐标变换
 		FVector CameraLocation;
@@ -538,7 +555,7 @@ void AEnemy::Fire4_2()
 	count4_2 = -count4_2;
 }
 
-// 发射弹幕：返魂蝶-球面光玉
+// 发射弹幕：终符-球面光玉
 void AEnemy::Fire5_1()
 {
 	if (ProjectileClass)
@@ -578,6 +595,55 @@ void AEnemy::Fire5_1()
 						Projectile->FireInDirection(LaunchDirection);
 						// 设置初始速度
 						Projectile->SetSpeed(600.0f);
+					}
+
+				}
+			}
+		}
+	}
+}
+
+// 发射弹幕：终符-球面粉弹
+void AEnemy::Fire5_2()
+{
+	if (Projectile_Pink)
+	{
+		// 坐标变换
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+		FRotator MuzzleRotation = CameraRotation;
+
+		//生成发射物
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = Instigator;
+
+			AProjectile_Normal* Projectile;
+			MuzzleRotation.Pitch -= 90.0f;
+			MuzzleRotation.Yaw += 15.0f;//
+			for (int i = 0; i < 17; ++i)
+			{
+				MuzzleRotation.Pitch += 10.0f;
+				MuzzleRotation.Yaw += 15.0f;
+
+				for (int j = 0; j < 12; ++j)
+				{
+					MuzzleRotation.Yaw += 30.0f;
+
+					Projectile = World->SpawnActor<AProjectile_Normal>(Projectile_Pink, MuzzleLocation, MuzzleRotation, SpawnParams);
+					if (Projectile)
+					{
+
+						// 设置发射物的初始轨道。
+						FVector LaunchDirection = MuzzleRotation.Vector();
+						Projectile->FireInDirection(LaunchDirection);
+						// 设置初始速度
+						Projectile->SetSpeed(300.0f);
 					}
 
 				}

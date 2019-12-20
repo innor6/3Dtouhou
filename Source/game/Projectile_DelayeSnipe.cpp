@@ -12,8 +12,9 @@ AProjectile_DelayeSnipe::AProjectile_DelayeSnipe()
 
 	// 根组件：使用球体代表简单碰撞
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	//【待添加】设置碰撞通道
-	CollisionComponent->InitSphereRadius(15.0f); //碰撞半径
+	// 设置碰撞通道、碰撞半径
+	CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Projectile")); 
+	CollisionComponent->InitSphereRadius(15.0f);
 	RootComponent = CollisionComponent;
 
 	// 投射物组件：驱动发射物的运动

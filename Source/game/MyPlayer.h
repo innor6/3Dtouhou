@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "CoreMinimal.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/Pawn.h"
 #include "MyPlayer.generated.h"
 
@@ -32,13 +33,17 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+	// 组件:球体碰撞
+	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	USphereComponent* CollisionComponent;
 	// 组件：弹簧臂
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* OurCameraSpringArm;
 	// 组件：摄像机
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* OurCamera;
-	//输入变量
+	
+	// 输入变量
 	FVector MovementInput;
 	FVector2D CameraInput;
 	float ZoomFactor;
@@ -46,7 +51,7 @@ protected:
 	UPROPERTY(EditAnywhere) float BasicSpeed;
 	UPROPERTY(EditAnywhere) float Speed;
 	bool bSpeedUp;
-	//输入回调函数
+	// 输入回调函数
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void MoveUpward(float AxisValue);
@@ -56,4 +61,6 @@ protected:
 	void ZoomOut();
 	void SpeedUp();
 	void SpeedDown();
+
+	
 };
